@@ -1,10 +1,10 @@
-body {
-    font-size: 5vmin;
+html, body {
+    font-size: 4vmin;
 }
 
 .App {
   text-align: center;
-
+  background: #000;
 }
 
 .App-logo {
@@ -79,11 +79,12 @@ div.App > div.menu > div {
 
 
 div.App > div.plateau {
+    background: #000;
     display: grid;
     grid-template-rows: repeat(5, 1fr);
     grid-template-columns: repeat(5, 1fr);
-    column-gap: .25rem;
-    row-gap: .25rem;
+    column-gap: .75rem;
+    row-gap: .75rem;
     padding: .5rem;
 }
 
@@ -91,23 +92,34 @@ div.App > div.plateau > div {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: #ddd;
+    background: #333;
     border-radius: 1rem;
-    border: .25rem solid #0007;
+    box-shadow: 0 .2rem .4rem #fff7;
     text-transform: uppercase;
+    color: #fff8;
 }
 
 div.App > div.plateau > div.c1 {
-    background: #aaf;
+    background: #028;
 }
 
 div.App > div.plateau > div.c2 {
-    background: #fda;
+    background: #840;
 }
 
 div.App > div.plateau > div.c3 {
-    background: #f00;
-    color: #fff;
+    background: #000;
+    color: #555;
+    box-shadow: none;
+}
+
+div.App > div.plateau > div.X {
+    background: #300;
+    color: #fff8;
+    box-shadow: none;
+    border-radius: 0;
+    border: 2px solid #f00;
+    font-weight: bolder;
 }
 
 div.App > div.carte {

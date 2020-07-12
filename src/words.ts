@@ -1,24 +1,54 @@
 export default {
-    randomWords
+    getRandomWordIndexes,
+    getWords,
+    getWordIndexesFromURL
 }
 
 
-function randomWords(): string[] {
-    return shuffleWords(WORDS).slice(0, 25)
+function getWordIndexesFromURL(): number[] {
+    const arg = window.location.search.substr(1)
+    const values: number[] = arg
+        .split(",")
+        .map(txt => parseInt(`0x${txt}`, 16))
+    let isValid = true
+    for (const v of values) {
+        if (isNaN(v)) {
+            isValid = false
+            break
+        }
+    }
+    return isValid && values.length === 25 ? shuffle(values) : []
 }
 
+function getRandomWordIndexes(): number[] {
+    if (window.location.search.length > 1) {
+        // Get words from URL.
+        const values = getWordIndexesFromURL()
+        console.info("values=", values)
+        console.info("window.location=", window.location)
+        if (values.length === 25) return values
+    }
 
-function shuffleWords(words: string[]) {
-    const len = words.length
+    // Random words.
+    const indexes: number[] = []
+    for (let i = 0; i < WORDS.length; i++) indexes.push(i)
+    return shuffle(indexes).slice(0, 25)
+}
+
+function getWords(indexes: number[]): string[] {
+    return indexes.map(idx => WORDS[idx])
+}
+
+function shuffle(arr: any[]): any[] {
+    const len = arr.length
     for (let i = 0; i < len; i++) {
         const k = Math.floor(Math.random() * len)
-        const temp = words[i]
-        words[i] = words[k]
-        words[k] = temp
+        const tmp = arr[i]
+        arr[i] = arr[k]
+        arr[k] = tmp
     }
-    return words
+    return arr
 }
-
 
 const WORDS = [
     "Absence",

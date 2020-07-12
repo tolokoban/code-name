@@ -1,6 +1,7 @@
 import Tfw from 'tfw'
 import React from "react"
 import Words from '../words'
+import { QRCode } from "react-qr-svg"
 
 import "./App.css"
 
@@ -12,17 +13,28 @@ interface IAppProps {
 }
 interface IAppState {
     page: string
+    isSolution: boolean
+    indexes: number[]
     words: string[]
     classes: number[]
     items: string[]
 }
 
 export default class App extends React.Component<IAppProps, IAppState> {
-    state = {
+    state: IAppState = {
         page: "menu",
-        words: Words.randomWords(),
+        isSolution: Words.getWordIndexesFromURL().length === 25,
+        indexes: Words.getRandomWordIndexes(),
+        words: [],
         classes: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         items: createItems()
+    }
+
+    componentDidMount() {
+        this.setState({
+            words: Words.getWords(this.state.indexes),
+            page: this.state.isSolution ? "plateau" : "menu"
+        })
     }
 
     private swap = (index: number) => {
@@ -35,6 +47,10 @@ export default class App extends React.Component<IAppProps, IAppState> {
         const classes = ['App']
         if (this.props.className) classes.push(this.props.className)
 
+        const url = `${window.location.origin}${window.location.pathname}?${
+            this.state.indexes.map(v => v.toString(16)).join(",")
+            }`
+
         return (
             <Stack
                 className={classes.join(' ')}
@@ -44,32 +60,32 @@ export default class App extends React.Component<IAppProps, IAppState> {
                     <Touchable onClick={() => this.setState({ page: "plateau" })}>
                         <div>Plateau de Jeu</div>
                     </Touchable>
-                    <Touchable onClick={() => this.setState({ page: "carte" })}>
-                        <div>Cartes secrètes</div>
+                    <Touchable onClick={() => window.open(url, "code-name")}>
+                        <QRCode
+                            bgColor="#FFFFFF"
+                            fgColor="#000000"
+                            level="Q"
+                            style={{ width: "calc(80vmin - 2rem)" }}
+                            value={url} />
                     </Touchable>
                 </div>
                 <div key="plateau" className="plateau">
                     {
-                        this.state.words.map((word: string, index: number) =>
+                        this.state.words.map((word: string, index: number) => (
+                            this.state.isSolution ?
+                            <div
+                                key={`${word}-${index}`}
+                                className={this.state.items[index]}
+                            >{word}</div> :
                             <Touchable
+                                key={`${word}-${index}`}
                                 className={`c${this.state.classes[index]}`}
                                 onClick={() => this.swap(index)}
                             >
-                                <div key={word}>{word}</div>
+                                <div>{word}</div>
                             </Touchable>
-                        )
+                        ))
                     }
-                </div>
-                <div key="carte" className="carte" onDoubleClick={
-                    () => this.setState({ items: createItems() })
-                }>
-                    <div>
-                        {
-                            this.state.items.map(
-                                (itm: string, idx: number) =>
-                                    <div key={`${itm}${idx}`} className={itm}>X</div>)
-                        }
-                    </div>
                 </div>
             </Stack>
         )
@@ -78,9 +94,9 @@ export default class App extends React.Component<IAppProps, IAppState> {
 
 
 function createItems(): string[] {
-    const items = ["X", "O", "O", "O", "O", "O", "O", "O", "O"]
+    const items = ["X", "c3", "c3", "c3", "c3", "c3", "c3", "c3", "c3"]
     for (let i = 0; i < 8; i++) {
-        items.push("A", "B")
+        items.push("c1", "c2")
     }
 
     const len = items.length

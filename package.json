@@ -14,7 +14,8 @@
         "react-dom": "^16.13.1",
         "react-scripts": "3.4.1",
         "tfw": "^0.35.5",
-        "typescript": "^3.7.5"
+        "typescript": "^3.7.5",
+        "react-qr-svg": "^2.2.2"
     },
     "scripts": {
         "start": "PORT=5001 react-scripts start",
