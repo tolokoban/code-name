@@ -1,0 +1,2 @@
+(this["webpackJsonpcode-name"]=this["webpackJsonpcode-name"]||[]).push([[5],{48:function(n,o,t){"use strict";var e=function(){function n(n){this.name=n}return n.prototype.load=function(){console.log("Font loaded: ",this.name)},n}();o.a=e},49:function(n,o,t){},54:function(n,o,t){"use strict";t.r(o);var e=t(48);t(49);o.default=new e.a("josefin-sans")}}]);
+//# sourceMappingURL=5.5a5eedf8.chunk.js.map
