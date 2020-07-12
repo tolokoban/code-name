@@ -97,6 +97,19 @@ div.App > div.plateau > div {
     text-transform: uppercase;
 }
 
+div.App > div.plateau > div.c1 {
+    background: #aaf;
+}
+
+div.App > div.plateau > div.c2 {
+    background: #fda;
+}
+
+div.App > div.plateau > div.c3 {
+    background: #f00;
+    color: #fff;
+}
+
 div.App > div.carte {
     display: flex;
     justify-content: center;
@@ -125,18 +138,19 @@ div.App > div.carte > div > div.O {
 }
 
 div.App > div.carte > div > div.A {
-    background: #ddf;
+    background: #aaf;
 }
 
 div.App > div.carte > div > div.B {
-    background: #ffd;
+    background: #fda;
 }
 
 div.App > div.carte > div > div.X {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 300%;
+    font-size: 150%;
+    font-weight: bolder;
     background: #f00;
     color: #fff;
 }

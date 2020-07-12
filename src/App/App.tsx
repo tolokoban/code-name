@@ -13,6 +13,7 @@ interface IAppProps {
 interface IAppState {
     page: string
     words: string[]
+    classes: number[]
     items: string[]
 }
 
@@ -20,7 +21,14 @@ export default class App extends React.Component<IAppProps, IAppState> {
     state = {
         page: "menu",
         words: Words.randomWords(),
+        classes: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         items: createItems()
+    }
+
+    private swap = (index: number) => {
+        const classes = this.state.classes.slice()
+        classes[index] = (classes[index] + 1) % 4
+        this.setState({ classes })
     }
 
     render() {
@@ -42,10 +50,19 @@ export default class App extends React.Component<IAppProps, IAppState> {
                 </div>
                 <div key="plateau" className="plateau">
                     {
-                        this.state.words.map(word => <div key={word}>{word}</div>)
+                        this.state.words.map((word: string, index: number) =>
+                            <Touchable
+                                className={`c${this.state.classes[index]}`}
+                                onClick={() => this.swap(index)}
+                            >
+                                <div key={word}>{word}</div>
+                            </Touchable>
+                        )
                     }
                 </div>
-                <div key="carte" className="carte">
+                <div key="carte" className="carte" onDoubleClick={
+                    () => this.setState({ items: createItems() })
+                }>
                     <div>
                         {
                             this.state.items.map(
@@ -61,8 +78,8 @@ export default class App extends React.Component<IAppProps, IAppState> {
 
 
 function createItems(): string[] {
-    const items = ["X", "O", "O", "O", "O"]
-    for (let i = 0; i < 10; i++) {
+    const items = ["X", "O", "O", "O", "O", "O", "O", "O", "O"]
+    for (let i = 0; i < 8; i++) {
         items.push("A", "B")
     }
 
