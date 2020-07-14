@@ -1,6 +1,7 @@
 import Tfw from 'tfw'
 import React from "react"
 import Words from '../words'
+import Score from '../score'
 import { QRCode } from "react-qr-svg"
 import { IPoint } from 'tfw/dist/types'
 
@@ -109,6 +110,7 @@ export default class App extends React.Component<IAppProps, IAppState> {
                             icon="play"
                             onClick={() => this.setState({ page: "plateau" })}
                             label="Lancer le Jeu" />
+                        <Score />
                         <Button
                             wide={true}
                             flat={true}

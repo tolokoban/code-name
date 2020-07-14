@@ -1,0 +1,19 @@
+div.Score,
+div.Score>div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+div.Score>div>div.score {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    font-size: 200%;
+    width: 4rem;
+    height: 4rem;
+    margin: 0 -1.2rem;
+    border: 0.1rem solid var(--thm-white-7);
+}
