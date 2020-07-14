@@ -58,7 +58,7 @@ export default class App extends React.Component<IAppProps, IAppState> {
         }
         this.lastTapIndex = index
         this.lastTapTime = Date.now()
-                
+
         const rect = target.getBoundingClientRect()
         const left = rect.width / 3
         const right = 2 * left
@@ -99,6 +99,11 @@ export default class App extends React.Component<IAppProps, IAppState> {
             >
                 <div className="menu" key="menu">
                     <div className="vertical">
+                        <p>
+                            Pour commencer une manche,<br/>
+                            flashez le QRCode avec un smartphone<br/>
+                            puis cliquez sur le bouton ci-dessous.
+                        </p>
                         <Button
                             wide={true}
                             icon="play"
@@ -106,6 +111,7 @@ export default class App extends React.Component<IAppProps, IAppState> {
                             label="Lancer le Jeu" />
                         <Button
                             wide={true}
+                            flat={true}
                             icon="help"
                             onClick={() => this.setState({ page: "help" })}
                             label="Explications" />

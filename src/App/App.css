@@ -76,6 +76,13 @@ div.App>div.menu div.vertical {
     align-items: stretch;
 }
 
+div.App>div.menu div.vertical p {
+    font-size: 80%;
+    opacity: 0.5;
+    text-align: left;
+    max-width: 40vmax;
+}
+
 div.App>div.menu div.button {
     width: 80vmin;
     height: 20vmin;
