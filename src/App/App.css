@@ -1,48 +1,49 @@
 html, body {
-    font-size: 4vmin;
+    font-size: 2.8vw;
 }
 
 .App {
-  text-align: center;
-  background: #000;
+    text-align: center;
+    background: #000;
 }
 
 .App-logo {
-  height: 40vmin;
-  pointer-events: none;
+    height: 40vmin;
+    pointer-events: none;
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+    .App-logo {
+        animation: App-logo-spin infinite 20s linear;
+    }
 }
 
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+    background-color: #282c34;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
 }
 
 .App-link {
-  color: #61dafb;
+    color: #61dafb;
 }
 
 @keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
 }
 
-div.App > div {
+div.App>div {
     position: fixed;
     left: 0;
     top: 0;
@@ -52,16 +53,32 @@ div.App > div {
     padding: 0;
 }
 
-div.App > div.menu {
+div.App>div.menu {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
+    background: #bbb;
 }
 
-div.App > div.menu > div {
-    width: 80vmin;
+div.App>div.menu div.qrcode {
+    background: #fff;
+    margin: 0;
+    padding: 1rem;
+    box-shadow: 0 .2rem .4rem #0008;
+}
+
+div.App>div.menu div.vertical {
     height: 80vmin;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: stretch;
+}
+
+div.App>div.menu div.button {
+    width: 80vmin;
+    height: 20vmin;
     border-radius: 1rem;
     padding: 1rem;
     display: flex;
@@ -72,48 +89,55 @@ div.App > div.menu > div {
 }
 
 @media (orientation: portrait) {
-    div.App > div.menu {
+    div.App>div.menu {
         flex-direction: column;
     }
 }
 
-
-div.App > div.plateau {
+div.App>div.plateau {
     background: #000;
     display: grid;
     grid-template-rows: repeat(5, 1fr);
     grid-template-columns: repeat(5, 1fr);
-    column-gap: .75rem;
-    row-gap: .75rem;
+    column-gap: .25rem;
+    row-gap: .25rem;
     padding: .5rem;
 }
 
-div.App > div.plateau > div {
+div.App>div.plateau>div {
     display: flex;
     justify-content: center;
     align-items: center;
     background: #333;
-    border-radius: 1rem;
-    box-shadow: 0 .2rem .4rem #fff7;
+    border-radius: .125rem;
+    box-shadow: 0 .1rem .2rem #fff7;
     text-transform: uppercase;
     color: #fff8;
+    transition: all .5s;
+    border: 1px solid #0007;
 }
 
-div.App > div.plateau > div.c1 {
+div.App>div.plateau>div.c0 {
+    box-shadow: 0 .1rem .2rem #fff7,
+        .5rem 0 0 #0288 inset,
+        -.5rem 0 0 #8408 inset;
+}
+
+div.App>div.plateau>div.c1 {
     background: #028;
 }
 
-div.App > div.plateau > div.c2 {
+div.App>div.plateau>div.c2 {
     background: #840;
 }
 
-div.App > div.plateau > div.c3 {
+div.App>div.plateau>div.c3 {
     background: #000;
-    color: #555;
+    color: #aaa;
     box-shadow: none;
 }
 
-div.App > div.plateau > div.X {
+div.App>div.plateau>div.X {
     background: #300;
     color: #fff8;
     box-shadow: none;
@@ -122,47 +146,46 @@ div.App > div.plateau > div.X {
     font-weight: bolder;
 }
 
-div.App > div.carte {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+div.App>div.help {
+    padding: 1rem;
+    overflow: auto;
+    text-align: left;
+    background: #ddd;
 }
 
-div.App > div.carte > div {
-    width: 100vmin;
-    height: 100vmin;
-    display: grid;
-    grid-template-rows: repeat(5, 1fr);
-    grid-template-columns: repeat(5, 1fr);
-    column-gap: .5rem;
-    row-gap: .5rem;
-    padding: .5rem;
+div.App>div.help div.tbl {
+    display: table;
+    border-collapse: collapse;
 }
 
-div.App > div.carte > div > div {
-    font-size: 0;
-    border-radius: 50%;
-    box-shadow: 0 .1rem .2rem #0009;
+div.App>div.help div.tbl>div {
+    display: table-row;
 }
 
-div.App > div.carte > div > div.O {
-    background: #aaa;
-}
-
-div.App > div.carte > div > div.A {
-    background: #aaf;
-}
-
-div.App > div.carte > div > div.B {
-    background: #fda;
-}
-
-div.App > div.carte > div > div.X {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+div.App>div.help div.tbl>div>div {
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+    border: 2px solid #000a;
+    background: #fff;
     font-size: 150%;
-    font-weight: bolder;
-    background: #f00;
-    color: #fff;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: .25em;
+}
+
+div.App>div.help div.tbl div.blue {
+    background: #aaf;
+    color: #000a;
+}
+
+div.App>div.help div.tbl div.orange {
+    background: #fda;
+    color: #000a;
+}
+
+div.App>div.help div.tbl div.death {
+    background: #600;
+    color: #fffa;
+    box-shadow: 0 0 0 .5rem inset;
 }
