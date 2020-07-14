@@ -1,0 +1,2 @@
+(this["webpackJsonpcode-name"]=this["webpackJsonpcode-name"]||[]).push([[3],{78:function(n,t,e){"use strict";var o=function(){function n(n){this.name=n}return n.prototype.load=function(){console.log("Font loaded: ",this.name)},n}();t.a=o},80:function(n,t,e){},82:function(n,t,e){"use strict";e.r(t);var o=e(78);e(80);t.default=new o.a("mystery-quest")}}]);
+//# sourceMappingURL=3.340cb373.chunk.js.map
