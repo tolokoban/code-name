@@ -19,60 +19,60 @@ interface IAppProps {
 }
 interface IAppState {
     page: string
+    seed: number
     isSolution: boolean
-    indexes: number[]
     words: string[]
-    classes: number[]
-    items: string[]
+    classes: number[]   // 1: blue, 2: orange, 3: black, 4: death.
+    visibles: boolean[] // When true, we show the solution for this word.
 }
 
 export default class App extends React.Component<IAppProps, IAppState> {
     state: IAppState = {
         page: "menu",
-        isSolution: Words.getWordIndexesFromURL().length === 25,
-        indexes: Words.getRandomWordIndexes(),
+        seed: 1,
+        isSolution: false,
         words: [],
         classes: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        items: createItems()
+        visibles: []
     }
 
     private lastTapIndex = 0
     private lastTapTime = 0
 
     componentDidMount() {
+        const seed = Words.getSeed()
+        const indexes = Words.getRandomWordIndexes(seed)
+        const words = Words.getWords(indexes)
+        const classes = [
+            1, 1, 1, 1, 1, 1, 1, 1,
+            2, 2, 2, 2, 2, 2, 2, 2,
+            3, 3, 3, 3, 3, 3, 3, 3,
+            4
+        ]
+        Words.shuffle(words, classes)
+        const visibles = [
+            false, false, false, false, false,
+            false, false, false, false, false,
+            false, false, false, false, false,
+            false, false, false, false, false,
+            false, false, false, false, false
+        ]
+        const isSolution = window.location.search.length > 1
         this.setState({
-            words: Words.getWords(this.state.indexes),
-            page: this.state.isSolution ? "plateau" : "menu"
+            seed,
+            classes,
+            visibles,
+            words,
+            isSolution,
+            page: isSolution ? "plateau" : "menu"
         })
     }
 
-    private swap = (index: number, evt: IPoint) => {
-        const classes = this.state.classes.slice()
-        let value = classes[index]
-        const { target } = evt
-        if (!target) return
+    private swap = (index: number) => {
+        const visibles = this.state.visibles.slice()
 
-        if (this.lastTapIndex === index && Date.now() - this.lastTapTime < 400) {
-            // This is a double tap.
-            this.handleConfirmNewGame()
-            return
-        }
-        this.lastTapIndex = index
-        this.lastTapTime = Date.now()
-
-        const rect = target.getBoundingClientRect()
-        const left = rect.width / 3
-        const right = 2 * left
-        if (evt.x < left && value !== 1) {
-            value = 1
-        } else if (evt.x > right && value !== 2) {
-            value = 2
-        } else {
-            value = (value + 3) % 4
-        }
-        console.info("NEW value=", value)
-        classes[index] = value
-        this.setState({ classes })
+        visibles[index] = !visibles[index]
+        this.setState({ visibles })
     }
 
     private handleConfirmNewGame = async () => {
@@ -86,23 +86,19 @@ export default class App extends React.Component<IAppProps, IAppState> {
     }
 
     render() {
-        const classes = ['App']
-        if (this.props.className) classes.push(this.props.className)
-
         const url = `${window.location.origin}${window.location.pathname}?${
-            this.state.indexes.map(v => v.toString(16)).join(",")
-            }`
+            this.state.seed.toString(16)}`
 
         return (
             <Stack
-                className={classes.join(' ')}
+                className="App"
                 value={this.state.page}
             >
                 <div className="menu" key="menu">
                     <div className="vertical">
                         <p>
-                            Pour commencer une manche,<br/>
-                            flashez le QRCode avec un smartphone<br/>
+                            Pour commencer une manche,<br />
+                            flashez le QRCode avec un smartphone<br />
                             puis cliquez sur le bouton ci-dessous.
                         </p>
                         <Button
@@ -135,21 +131,25 @@ export default class App extends React.Component<IAppProps, IAppState> {
                     className="plateau"
                 >
                     {
-                        this.state.words.map((word: string, index: number) => (
-                            this.state.isSolution ?
-                                <div
-                                    key={`${word}-${index}`}
-                                    className={this.state.items[index]}
-                                >{word}</div> :
-                                <Touchable
-                                    key={`${word}-${index}`}
-                                    className={`c${this.state.classes[index]}`}
-                                    onClick={(evt: IPoint) => this.swap(index, evt)}
-                                >
-                                    <div>{word}</div>
-                                </Touchable>
-                        ))
+                        this.state.words.map((word: string, index: number) => {
+                            const { classes, visibles, isSolution } = this.state
+                            const classNames = [`c${classes[index]}`]
+                            if (!isSolution && !visibles[index]) {
+                                classNames.push("c0")
+                            }
+                            return <Touchable
+                                key={`${word}-${index}`}
+                                className={classNames.join(" ")}
+                                onClick={() => this.swap(index)}
+                            ><div>{hyphenate(word)}</div></Touchable>
+                        })
                     }
+                    <Button
+                        className="undo"
+                        icon="undo"
+                        small={true}
+                        onClick={this.handleConfirmNewGame}
+                    />
                 </div>
                 <div key="help" className="help">
                     <h1>Code-Name</h1>
@@ -257,7 +257,7 @@ export default class App extends React.Component<IAppProps, IAppState> {
                         Pour changer de manche, il faut double cliquer sur le
                         plateau.
                     </p>
-                    <hr/>
+                    <hr />
                     <div>
                         <Button
                             label="Retour au jeu"
@@ -271,18 +271,10 @@ export default class App extends React.Component<IAppProps, IAppState> {
 }
 
 
-function createItems(): string[] {
-    const items = ["X", "c3", "c3", "c3", "c3", "c3", "c3", "c3", "c3"]
-    for (let i = 0; i < 8; i++) {
-        items.push("c1", "c2")
-    }
-
-    const len = items.length
-    for (let i = 0; i < len; i++) {
-        const k = Math.floor(Math.random() * len)
-        const tmp = items[i]
-        items[i] = items[k]
-        items[k] = tmp
-    }
-    return items
+function hyphenate(word: string): JSX.Element {
+    if (word.length <= 8) return <span>{word}</span>
+    return <div>
+        <span>{word.substr(0, 8)}</span>
+        <span>{word.substr(8)}</span>
+    </div>
 }

@@ -1,53 +1,52 @@
+import Rnd from './rnd'
+
 export default {
     getRandomWordIndexes,
+    getSeed,
     getWords,
-    getWordIndexesFromURL
+    shuffle,
 }
 
 
-function getWordIndexesFromURL(): number[] {
+function getSeed(): number {
     const arg = window.location.search.substr(1)
-    const values: number[] = arg
-        .split(",")
-        .map(txt => parseInt(`0x${txt}`, 16))
-    let isValid = true
-    for (const v of values) {
-        if (isNaN(v)) {
-            isValid = false
-            break
-        }
-    }
-    return isValid && values.length === 25 ? shuffle(values) : []
+    const value: number = parseInt(`0x${arg}`, 16)
+    const MAX = 0xFFFFFF
+    if (isNaN(value)) return Math.floor(Math.random() * MAX)
+    return value
 }
 
-function getRandomWordIndexes(): number[] {
-    if (window.location.search.length > 1) {
-        // Get words from URL.
-        const values = getWordIndexesFromURL()
-        console.info("values=", values)
-        console.info("window.location=", window.location)
-        if (values.length === 25) return values
-    }
+function getRandomWordIndexes(seed: number): number[] {
+    const rnd = new Rnd(seed)
 
     // Random words.
     const indexes: number[] = []
     for (let i = 0; i < WORDS.length; i++) indexes.push(i)
-    return shuffle(indexes).slice(0, 25)
+    for (let i = 0; i < WORDS.length; i++) {
+        const j = rnd.int(WORDS.length)
+        const tmp = indexes[i]
+        indexes[i] = indexes[j]
+        indexes[j] = tmp
+    }
+
+    const WORDS_PER_GAME = 25
+    return indexes.slice(0, WORDS_PER_GAME)
 }
 
 function getWords(indexes: number[]): string[] {
     return indexes.map(idx => WORDS[idx])
 }
 
-function shuffle(arr: any[]): any[] {
-    const len = arr.length
+function shuffle(...arrays: any[][]) {
+    const len = arrays[0].length
     for (let i = 0; i < len; i++) {
         const k = Math.floor(Math.random() * len)
-        const tmp = arr[i]
-        arr[i] = arr[k]
-        arr[k] = tmp
+        for (const arr of arrays) {
+            const tmp = arr[i]
+            arr[i] = arr[k]
+            arr[k] = tmp
+        }
     }
-    return arr
 }
 
 const WORDS = [
