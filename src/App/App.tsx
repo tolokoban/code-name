@@ -144,12 +144,15 @@ export default class App extends React.Component<IAppProps, IAppState> {
                             ><div>{hyphenate(word)}</div></Touchable>
                         })
                     }
-                    <Button
-                        className="undo"
-                        icon="undo"
-                        small={true}
-                        onClick={this.handleConfirmNewGame}
-                    />
+                    {
+                        !this.state.isSolution &&
+                        <Button
+                            className="undo"
+                            icon="undo"
+                            small={true}
+                            onClick={this.handleConfirmNewGame}
+                        />
+                    }
                 </div>
                 <div key="help" className="help">
                     <h1>Code-Name</h1>
